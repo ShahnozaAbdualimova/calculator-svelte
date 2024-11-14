@@ -1,9 +1,13 @@
 <script>
     import { onMount } from 'svelte';
+
     let input = "";
     let lastInputIsOperator = false; 
+    const maxDigits = 10; 
 
     function append(value) {
+        if (input.length >= maxDigits && (typeof value === "number" || value === ".")) return;
+
         if (typeof value === "number" || value === ".") {
             input += value;
             lastInputIsOperator = false; 
@@ -16,6 +20,9 @@
     function calculate() {
         try {
             input = eval(input);
+            if (input.toString().length > maxDigits) {
+                input = input.toString().slice(0, maxDigits); 
+            }
             lastInputIsOperator = false;
         } catch (error) {
             input = "Xato";
@@ -77,4 +84,3 @@
         <button class="p-2 text-xl cursor-pointer rounded bg-yellow-500 text-white hover:bg-yellow-600 active:bg-yellow-700 transition-transform duration-200 ease-in-out transform hover:scale-105 col-span-4" on:click={() => clearInput()}>C</button>
     </div>
 </div>
-
